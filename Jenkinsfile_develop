@@ -24,19 +24,19 @@ pipeline {
         stage('Tag and Push Image') {
             steps {
                 script {
-                    // Retrieve Docker Hub credentials
+                    // Use credentials to log in to Docker Hub
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         // Log in to Docker Hub
                         sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
 
-                        // Tag the images
+                        // Tag the image with the correct namespace and repo name
                         def buildId = env.BUILD_ID ?: "local"
-                        sh 'docker tag my-static-website hargun1955991532/my-static-website:latest'
-                        sh "docker tag my-static-website hargun1955991532/my-static-website:develop-${buildId}"
+                        sh 'docker tag my-static-website docker.io/hargun1955991532/my-static-website:latest'
+                        sh "docker tag my-static-website docker.io/hargun1955991532/my-static-website:develop-${buildId}"
 
-                        // Push the images
-                        sh 'docker push HargunS1/my-static-website:latest'
-                        sh "docker push HargunS1/my-static-website:develop-${buildId}"
+                        // Push the image to Docker Hub (repository will be auto-created)
+                        sh 'docker push docker.io/hargun1955991532/my-static-website:latest'
+                        sh "docker push docker.io/hargun1955991532/my-static-website:develop-${buildId}"
                     }
                 }
             }
