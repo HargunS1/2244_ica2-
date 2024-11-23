@@ -23,12 +23,13 @@ pipeline {
         }
         stage('Tag and Push Image') {
             steps {
-                sh 'docker tag my-static-website HargunS1/my-static-website:latest'
-                sh 'docker tag my-static-website HargunS1/my-static-website:develop-${env.BUILD_ID}'
-                sh 'docker push HargunS1/my-static-website:latest'
-                sh 'docker push HargunS1/my-static-website:develop-${env.BUILD_ID}'
-            }
-        }
-    }
-}
+                script {
+                    // Retrieve Docker Hub credentials
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        // Log in to Docker Hub
+                        sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
 
+                        // Tag the images
+                        def buildId = env.BUILD_ID ?: "local"
+                        sh 'docker tag my-static-website HargunS1/my-static-website:latest'
+                        sh "docker tag my-static-website HargunS1/m
