@@ -31,8 +31,8 @@ pipeline {
 
                         // Tag the images
                         def buildId = env.BUILD_ID ?: "local"
-                        sh 'docker tag my-static-website HargunS1/my-static-website:latest'
-                        sh "docker tag my-static-website HargunS1/my-static-website:develop-${buildId}"
+                        sh 'docker tag my-static-website hargun1955991532/my-static-website:latest'
+                        sh "docker tag my-static-website hargun1955991532/my-static-website:develop-${buildId}"
 
                         // Push the images
                         sh 'docker push HargunS1/my-static-website:latest'
