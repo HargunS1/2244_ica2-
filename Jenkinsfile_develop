@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Run Container') {
             steps {
-                sh 'docker run -d -p 8081:80 --name develop-container my-static-website'
+                sh 'docker stop my-static-website || true && docker rm my-static-website || treue && docker run -d -p 8081:80 --name develop-container my-static-website'
             }
         }
         stage('Test') {
